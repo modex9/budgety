@@ -33,7 +33,18 @@ var UIController = (function() {
 
 var controller = (function(UICtrl, budgetCtrl) {
 
-	var DOM = UICtrl.getDOMstrings();
+	var setupEventListeners = function() {
+
+		var DOM = UICtrl.getDOMstrings();
+
+		document.querySelector(DOM.inputButton).addEventListener('click', controlAddItem);
+
+		document.addEventListener('keypress', function(event) {
+			if(event.keyCode === 13 || event.which === 13) {
+				controlAddItem();
+			}
+		});
+	}
 
 	var controlAddItem = function() {
 
@@ -50,12 +61,12 @@ var controller = (function(UICtrl, budgetCtrl) {
 		//5. Display the budget on the UI
 	}
 
-	document.querySelector(DOM.inputButton).addEventListener('click', controlAddItem);
-
-	document.addEventListener('keypress', function(event) {
-		if(event.keyCode === 13 || event.which === 13) {
-			controlAddItem();
+	return {
+		run : function() {
+			setupEventListeners();
 		}
-	});
+	}
 
 })(UIController, budgetController);
+
+controller.run();
