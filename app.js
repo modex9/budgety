@@ -72,6 +72,23 @@ var budgetController = (function() {
 				totalExp: data.totals.exp,
 				percentage: data.percentage
 			}
+		},
+
+		deleteItem : function(type, id) {
+			var ids, index;
+			var ids = data.allItems[type].map(function(item) {
+				return item.id;
+			});
+
+			index = ids.indexOf(id);
+
+			if(index !== -1) {
+				data.allItems[type].splice(index, 1);
+			}
+		},
+
+		testing : function() {
+			return data;
 		}
 	};
 
@@ -229,13 +246,15 @@ var controller = (function(UICtrl, budgetCtrl) {
 
 		itemId = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
-		if(itemID) {
-			
-			splitID = itemID.split('-');
+		if(itemId) {
+
+			splitID = itemId.split('-');
 			type = splitID[0];
-			ID = splitID[1];
+			ID = parseInt(splitID[1]);
 
 			// 1. Delete the item from the data structure
+
+			budgetController.deleteItem(type, ID);
 
 			// 2. Delete the item from the UI
 
@@ -253,6 +272,7 @@ var controller = (function(UICtrl, budgetCtrl) {
 				totalExp: 0,
 				percentage: -1
 			});
+			budgetController.testing();
 		}
 	}
 
