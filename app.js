@@ -55,10 +55,9 @@ var budgetController = (function() {
 			return newItem;
 		},
 
-		calculateBudget: function() {
+		calculateBudget: function(type) {
 			// Calculate total income and expenses
-			calculateTotal('exp');
-			calculateTotal('inc');
+			calculateTotal(type);
 			// Calculate the budget: income - expenses
 			data.budget = data.totals.inc - data.totals.exp;
 			// Calculate the percentage of income that we spent
@@ -158,6 +157,8 @@ var UIController = (function() {
 
 var controller = (function(UICtrl, budgetCtrl) {
 
+	var input;
+
 	var setupEventListeners = function() {
 
 		var DOM = UICtrl.getDOMstrings();
@@ -173,15 +174,16 @@ var controller = (function(UICtrl, budgetCtrl) {
 
 
 	var updatebudget = function() {
+
 		// 1. Calculate the budget
-		budgetCtrl.calculateBudget();
+		budgetCtrl.calculateBudget(input.type);
 		// 2. Return budget
 		var budget = budgetCtrl.getBudget();
 		// 3. Display the budget on the UI
 	}
 
 	var controlAddItem = function() {
-		var input, newItem;
+		var newItem;
 
 		// 1. Get the filled input data
 		input = UICtrl.getInput();
@@ -197,6 +199,7 @@ var controller = (function(UICtrl, budgetCtrl) {
 
 			// 4. Calculate and update budget
 			updatebudget();
+
 		}
 	}
 
