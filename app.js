@@ -157,6 +157,11 @@ var UIController = (function() {
 
 		},
 
+		deleteListItem: function(selectorID) {
+			var el = document.getElementById(selectorID);
+			el.parentNode.removeChild(el);
+		},
+
 		clearFields : function() {
 			var fields, fieldsArr;
 			fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' +
@@ -192,8 +197,6 @@ var UIController = (function() {
 
 var controller = (function(UICtrl, budgetCtrl) {
 
-	var input;
-
 	var setupEventListeners = function() {
 
 		var DOM = UICtrl.getDOMstrings();
@@ -210,10 +213,10 @@ var controller = (function(UICtrl, budgetCtrl) {
 	}
 
 
-	var updatebudget = function() {
+	var updatebudget = function(type) {
 
 		// 1. Calculate the budget
-		budgetCtrl.calculateBudget(input.type);
+		budgetCtrl.calculateBudget(type);
 		// 2. Return budget
 		var budget = budgetCtrl.getBudget();
 		// 3. Display the budget on the UI
@@ -221,7 +224,7 @@ var controller = (function(UICtrl, budgetCtrl) {
 	}
 
 	var controlAddItem = function() {
-		var newItem;
+		var input, newItem;
 
 		// 1. Get the filled input data
 		input = UICtrl.getInput();
@@ -236,7 +239,7 @@ var controller = (function(UICtrl, budgetCtrl) {
 			UICtrl.clearFields();
 
 			// 4. Calculate and update budget
-			updatebudget();
+			updatebudget(input.type);
 
 		}
 	};
@@ -258,7 +261,11 @@ var controller = (function(UICtrl, budgetCtrl) {
 
 			// 2. Delete the item from the UI
 
+			UICtrl.deleteListItem(itemId);
+
 			// 3. Update and show new budget
+
+			updatebudget(type);
 		}
 
 	};
